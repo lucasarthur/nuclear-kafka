@@ -18,10 +18,11 @@
 
 (ns nuclear-kafka.security)
 
-(def protocols {:plain "PLAINTEXT"
-                :ssl "SSL"
-                :sasl-plain "SASL_PLAINTEXT"
-                :sasl-ssl "SASL_SSL"})
+(def protocols
+  {:plain "PLAINTEXT"
+   :ssl "SSL"
+   :sasl-plain "SASL_PLAINTEXT"
+   :sasl-ssl "SASL_SSL"})
 
 (def mechanisms
   {:plain {:name "PLAIN"

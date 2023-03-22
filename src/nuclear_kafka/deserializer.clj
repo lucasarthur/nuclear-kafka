@@ -77,6 +77,6 @@
   (cond
     (keyword? x) (if-let [f (deserializers x)]
                    (f)
-                   (throw (ex-info "unknown deserializer alias" {})))
+                   (throw (ex-info "unknown deserializer alias" {:type :unknown-deserializer})))
     (fn? x) (x)
     :else x))

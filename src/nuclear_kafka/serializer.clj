@@ -69,6 +69,6 @@
   (cond
     (keyword? x) (if-let [f (serializers x)]
                    (f)
-                   (throw (ex-info "unknown serializer alias" {})))
+                   (throw (ex-info "unknown serializer alias" {:type :unknown-serializer})))
     (fn? x) (x)
     :else  x))
