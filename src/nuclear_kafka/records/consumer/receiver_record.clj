@@ -21,7 +21,9 @@
   (:require
    [nuclear-kafka.records.headers :refer [headers->map]]
    [nuclear-kafka.records.timestamp-type :refer [timestamp-types]]
-   [nuclear-kafka.records.consumer.receiver-offset :refer [receiver-offset->map]]))
+   [nuclear-kafka.records.consumer.receiver-offset :refer [receiver-offset->map]])
+  (:import
+   (reactor.kafka.receiver ReceiverRecord)))
 
 (defn receiver-offset [record]
   (-> record .receiverOffset receiver-offset->map))
@@ -60,15 +62,16 @@
   (-> record .leaderEpoch (.orElse -1)))
 
 (defn receiver-record->map [record]
-  (->> {:topic (topic record)
-        :key (key record)
-        :value (value record)
-        :headers (headers record)
-        :partition (partition record)
-        :offset (offset record)
-        :receiver-offset (receiver-offset record)
-        :timestamp (timestamp record)
-        :timestamp-type (timestamp-type record)
-        :serialized-key-size (serialized-key-size record)
-        :serialized-value-size (serialized-value-size record)
-        :leader-epoch (leader-epoch record)}))
+  (cond-> {:topic (topic record)
+           :key (key record)
+           :value (value record)
+           :headers (headers record)
+           :partition (partition record)
+           :offset (offset record)
+           :timestamp (timestamp record)
+           :timestamp-type (timestamp-type record)
+           :serialized-key-size (serialized-key-size record)
+           :serialized-value-size (serialized-value-size record)
+           :leader-epoch (leader-epoch record)}
+    (instance? ReceiverRecord record) (assoc :receiver-offset (receiver-offset record))
+    true (->> (filter (comp some? val)) (into {}))))
