@@ -107,4 +107,36 @@
       (add-consumer-listener consumer-listener)
       (.subscription topics)))
 
-;; add shape option here
+;; Consumer
+;; {:brokers ["localhost" 9092]
+;;  :topics ["abc"]
+;;  :group-id "my-consumer"
+;;  :key-deserializer long-deserializer
+;;  :value-deserializer json-deserializer
+;;  :poll-timeout 1000
+;;  :close-timeout 20000
+;;  :assign-listeners [println]
+;;  :revoke-listeners [println]
+;;  :commit-interval 3000
+;;  :commit-batch-size 5
+;;  :max-commit-attempts 500
+;;  :commit-retry-interval 1000
+;;  :on-scheduler bounded-elastic
+;;  :consumer-listener
+;;  {:on-consumer-added #(println "id: " %1 "\nconsumer: " %2)
+;;   :on-consumer-removed #(println "id: " %1 "\nconsumer: " %2)}
+;;  :protocol :sasl-plain
+;;  :auth {:username "lucas"
+;;         :password "arthur0102"
+;;         :mechanism :plain}}
+
+;; Consumer minimal config
+;; {:brokers ["localhost" 9092]
+;;  :topics ["abc"]
+;;  :group-id "my-consumer"
+;;  :key-deserializer long-deserializer
+;;  :value-deserializer json-deserializer
+;;  :protocol :sasl-plain
+;;  :auth {:username "lucas"
+;;         :password "arthur0102"
+;;         :mechanism :plain}}

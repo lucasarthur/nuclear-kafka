@@ -64,3 +64,27 @@
       (.closeTimeout (ms->duration close-timeout))
       (.scheduler on-scheduler)
       (add-producer-listener producer-listener)))
+
+;; Producer
+;; {:brokers ["localhost" 9092]
+;;  :key-serializer long-serializer
+;;  :value-serializer json-serializer
+;;  :max-in-flight 10
+;;  :stop-on-error? false
+;;  :on-scheduler bounded-elastic
+;;  :producer-listener
+;;  {:on-producer-added #(println "id: " %1 "\nproducer: " %2)
+;;   :on-producer-removed #(println "id: " %1 "\nproducer: " %2)}
+;;  :protocol :sasl-plain
+;;  :auth {:username "lucas"
+;;         :password "arthur0102"
+;;         :mechanism :plain}}
+
+;; Producer minimal config
+;; {:brokers ["localhost" 9092]
+;;  :key-serializer long-serializer
+;;  :value-serializer json-serializer
+;;  :protocol :sasl-plain
+;;  :auth {:username "lucas"
+;;         :password "arthur0102"
+;;         :mechanism :plain}}

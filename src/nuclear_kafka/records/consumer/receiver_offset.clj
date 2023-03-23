@@ -16,24 +16,19 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
-(ns nuclear-kafka.records.producer.result
+(ns nuclear-kafka.records.consumer.receiver-offset
   (:require
-   [nuclear-kafka.util :refer [update-if-contains]]
-   [nuclear-kafka.producer.record-metadata :refer [->record-metadata-map]]))
+   [nuclear-kafka.records.topic-partition :refer [topic-partition->map]]))
 
-(defn exception [result]
-  (.exception result))
+(defn topic-partition [receiver-offset]
+  (-> receiver-offset .topicPartition topic-partition->map))
 
-(defn correlation-metadata [result]
-  (.correlationMetadata result))
+(defn offset [receiver-offset]
+  (.offset receiver-offset))
 
-(defn record-metadata [result]
-  (.recordMetadata result))
+(defn ack [receiver-offset]
+  (.acknowledge receiver-offset)
+  receiver-offset)
 
-(defn result->map [result]
-  (->> {:error (exception result)
-        :correlation-metadata (correlation-metadata result)
-        :record-metadata (record-metadata result)}
-       (filter (comp some? val))
-       (into {})
-       (update-if-contains :record-metadata ->record-metadata-map)))
+(defn commit [receiver-offset]
+  (.commit receiver-offset))

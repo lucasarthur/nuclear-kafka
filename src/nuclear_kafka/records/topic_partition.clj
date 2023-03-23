@@ -16,24 +16,21 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
-(ns nuclear-kafka.records.producer.result
-  (:require
-   [nuclear-kafka.util :refer [update-if-contains]]
-   [nuclear-kafka.producer.record-metadata :refer [->record-metadata-map]]))
+(ns nuclear-kafka.records.topic-partition
+  (:refer-clojure :exclude [partition])
+  (:import
+   (org.apache.kafka.common TopicPartition)))
 
-(defn exception [result]
-  (.exception result))
+(defn topic [tp]
+  (-> tp .topic keyword))
 
-(defn correlation-metadata [result]
-  (.correlationMetadata result))
+(defn partition [tp]
+  (.partition tp))
 
-(defn record-metadata [result]
-  (.recordMetadata result))
+(defn ->topic-partition
+  ([[t p]] (->topic-partition t p))
+  ([topic partition] (TopicPartition. (name topic) partition)))
 
-(defn result->map [result]
-  (->> {:error (exception result)
-        :correlation-metadata (correlation-metadata result)
-        :record-metadata (record-metadata result)}
-       (filter (comp some? val))
-       (into {})
-       (update-if-contains :record-metadata ->record-metadata-map)))
+(defn topic-partition->map [tp]
+  {:topic (topic tp)
+   :partition (partition tp)})
