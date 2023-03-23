@@ -18,12 +18,13 @@
 
 (ns nuclear-kafka.serializer
   (:require [cheshire.core :as json])
-  (:import [org.apache.kafka.common.serialization
-            Serializer
-            ByteArraySerializer
-            ByteBufferSerializer
-            LongSerializer
-            StringSerializer]))
+  (:import
+   (org.apache.kafka.common.serialization
+    Serializer
+    ByteArraySerializer
+    ByteBufferSerializer
+    LongSerializer
+    StringSerializer)))
 
 (defn serializer [f]
   (reify

@@ -21,12 +21,13 @@
    [clojure.java.io :as io]
    [clojure.edn :as edn]
    [cheshire.core :as json])
-  (:import [org.apache.kafka.common.serialization
-            Deserializer
-            ByteArrayDeserializer
-            ByteBufferDeserializer
-            LongDeserializer
-            StringDeserializer]))
+  (:import
+   (org.apache.kafka.common.serialization
+    Deserializer
+    ByteArrayDeserializer
+    ByteBufferDeserializer
+    LongDeserializer
+    StringDeserializer)))
 
 (defn deserializer [f]
   (reify

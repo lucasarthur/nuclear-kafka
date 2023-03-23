@@ -23,7 +23,8 @@
    [nuclear.util :refer [ms->duration]]
    [nuclear.util.sam :refer [->consumer ->supplier]]
    [nuclear.util.schedulers :refer [immediate]])
-  (:import [reactor.kafka.receiver ReceiverOptions ReceiverOptions$ConsumerListener]))
+  (:import
+   (reactor.kafka.receiver ReceiverOptions ReceiverOptions$ConsumerListener)))
 
 (defn ->consumer-listener [on-consumer-added on-consumer-removed]
   (reify
@@ -105,3 +106,5 @@
       (.schedulerSupplier (->supplier (fn [] on-scheduler)))
       (add-consumer-listener consumer-listener)
       (.subscription topics)))
+
+;; add shape option here

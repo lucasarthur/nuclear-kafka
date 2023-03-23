@@ -23,8 +23,8 @@
    [nuclear.util :refer [ms->duration]]
    [nuclear.util.schedulers :refer [immediate]])
   (:import
-   [reactor.util.concurrent Queues]
-   [reactor.kafka.sender SenderOptions SenderOptions$ProducerListener]))
+   (reactor.util.concurrent Queues)
+   (reactor.kafka.sender SenderOptions SenderOptions$ProducerListener)))
 
 (defn ->producer-listener [on-producer-added on-producer-removed]
   (reify

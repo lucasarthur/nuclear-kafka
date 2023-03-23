@@ -43,6 +43,17 @@
 ;;         :password "arthur0102"
 ;;         :mechanism :plain}}
 
+;; Consumer minimal config
+;; {:brokers ["localhost" 9092]
+;;  :topics ["abc"]
+;;  :group-id "my-consumer"
+;;  :key-deserializer long-deserializer
+;;  :value-deserializer json-deserializer
+;;  :protocol :sasl-plain
+;;  :auth {:username "lucas"
+;;         :password "arthur0102"
+;;         :mechanism :plain}}
+
 ;; Producer
 ;; {:brokers ["localhost" 9092]
 ;;  :key-serializer long-serializer
@@ -53,6 +64,15 @@
 ;;  :producer-listener
 ;;  {:on-producer-added #(println "id: " %1 "\nproducer: " %2)
 ;;   :on-producer-removed #(println "id: " %1 "\nproducer: " %2)}
+;;  :protocol :sasl-plain
+;;  :auth {:username "lucas"
+;;         :password "arthur0102"
+;;         :mechanism :plain}}
+
+;; Producer minimal config
+;; {:brokers ["localhost" 9092]
+;;  :key-serializer long-serializer
+;;  :value-serializer json-serializer
 ;;  :protocol :sasl-plain
 ;;  :auth {:username "lucas"
 ;;         :password "arthur0102"
