@@ -35,10 +35,7 @@
   [(key header) (-> header value (String. "UTF-8"))])
 
 (defn pairs->map [pairs]
-  (reduce
-   (fn [acc [k vs]] (update acc k #(conj (or % []) vs)))
-   {}
-   pairs))
+  (reduce (fn [m [k vs]] (update m k #(conj (or % []) vs))) {} pairs))
 
 (defn add
   ([k v headers] (add [k v] headers))
@@ -55,6 +52,20 @@
 
 (defn headers->map [headers]
   (->> headers (map header->pair) (pairs->map)))
+
+(defn map->single-value-map
+  ([m] (map->single-value-map true m))
+  ([last? m] (reduce-kv #(assoc %1 %2 ((if last? last first) %3)) {} m)))
+
+(defn header->single-value-map
+  ([key headers] (header->single-value-map key true headers))
+  ([key last? headers]
+   (->> headers (header->map key) (map->single-value-map last?))))
+
+(defn headers->single-value-map
+  ([headers] (headers->single-value-map true headers))
+  ([last? headers]
+   (->> headers headers->map (map->single-value-map last?))))
 
 (defn ->record-headers [headers]
   (reduce #(add %2 %1) (RecordHeaders.) headers))

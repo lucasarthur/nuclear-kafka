@@ -32,3 +32,9 @@
 
 (defn commit [receiver-offset]
   (.commit receiver-offset))
+
+(defn receiver-offset->map [receiver-offset]
+  {:topic-partition (topic-partition receiver-offset)
+   :offset (offset receiver-offset)
+   :ack #(ack receiver-offset)
+   :commit #(commit receiver-offset)})
