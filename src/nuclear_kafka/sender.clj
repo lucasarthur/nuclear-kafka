@@ -17,7 +17,6 @@
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
 (ns nuclear-kafka.sender
-  (:refer-clojure :exclude [send])
   (:require
    [nuclear-kafka.config.producer :refer [->producer-options]]
    [nuclear-kafka.records.shape :refer [producer-shape]]
@@ -52,9 +51,6 @@
 
 (defn tx-manager [{:keys [sender]}]
   (.transactionManager sender))
-
-(defn ->outbound [{:keys [sender]}] ;; create kafka outbound
-  (.createOutbound sender))
 
 (defn on-producer! [producer-fn {:keys [receiver]}]
   (->> producer-fn ->function (.doOnProducer receiver)))

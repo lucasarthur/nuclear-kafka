@@ -19,7 +19,7 @@
 (ns nuclear-kafka.records.producer.result
   (:require
    [nuclear-kafka.util :refer [update-if-contains]]
-   [nuclear-kafka.producer.record-metadata :refer [->record-metadata-map]]))
+   [nuclear-kafka.records.producer.record-metadata :refer [record-metadata->map]]))
 
 (defn exception [result]
   (.exception result))
@@ -36,4 +36,4 @@
         :record-metadata (record-metadata result)}
        (filter (comp some? val))
        (into {})
-       (update-if-contains :record-metadata ->record-metadata-map)))
+       (update-if-contains :record-metadata record-metadata->map)))

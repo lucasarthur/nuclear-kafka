@@ -65,12 +65,11 @@
       (.scheduler on-scheduler)
       (add-producer-listener producer-listener)))
 
-;; add transactions
-
 ;; Producer
 ;; {:brokers ["localhost" 9092]
 ;;  :key-serializer long-serializer
 ;;  :value-serializer json-serializer
+;;  :shape [:vector :topic :value]
 ;;  :max-in-flight 10
 ;;  :stop-on-error? false
 ;;  :on-scheduler bounded-elastic
@@ -86,6 +85,7 @@
 ;; {:brokers ["localhost" 9092]
 ;;  :key-serializer long-serializer
 ;;  :value-serializer json-serializer
+;;  :shape [:vector :topic :value]
 ;;  :protocol :sasl-plain
 ;;  :auth {:username "lucas"
 ;;         :password "arthur0102"
