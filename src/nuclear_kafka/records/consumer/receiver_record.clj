@@ -73,5 +73,5 @@
            :serialized-key-size (serialized-key-size record)
            :serialized-value-size (serialized-value-size record)
            :leader-epoch (leader-epoch record)}
-    (instance? ReceiverRecord record) (assoc :receiver-offset (receiver-offset record))
-    true (->> (filter (comp some? val)) (into {}))))
+    (instance? ReceiverRecord record)
+    (assoc :receiver-offset (receiver-offset record))))

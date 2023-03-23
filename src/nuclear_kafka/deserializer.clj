@@ -20,7 +20,8 @@
   (:require
    [clojure.java.io :as io]
    [clojure.edn :as edn]
-   [cheshire.core :as json])
+   [cheshire.core :as json]
+   [clojure.string :as str])
   (:import
    (org.apache.kafka.common.serialization
     Deserializer
@@ -51,7 +52,10 @@
      (some-> payload io/reader (json/parse-stream true)))))
 
 (defn keyword-deserializer ^Deserializer []
-  (deserializer (fn [_ ^bytes k] (some-> k (String. "UTF-8") keyword))))
+  (deserializer (fn [_ ^bytes k]
+                  (let [key-str (String. k "UTF-8")]
+                    (when-not (str/blank? key-str)
+                      (keyword key-str))))))
 
 (defn byte-array-deserializer ^ByteArrayDeserializer []
   (ByteArrayDeserializer.))
