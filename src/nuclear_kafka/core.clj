@@ -20,18 +20,18 @@
   (:require
    [nuclear.core :as nk]
    [nuclear-kafka.deserializer :refer [keyword-deserializer json-deserializer]]
-   [nuclear-kafka.receiver :refer [->receiver receive-auto-ack]]
-   [clojure.pprint :as pp]))
+   [nuclear-kafka.receiver :refer [->receiver receive-auto-ack]]))
 
 (def receiver-cfg
   {:brokers ["localhost" 9092]
    :topics [:nuclear-kafka-test]
    :group-id "nuclear-kafka-consumer-group"
    :key-deserializer keyword-deserializer
-   :value-deserializer json-deserializer})
+   :value-deserializer json-deserializer
+   :shape [:map :topic :key :value :headers]})
 
 (defn -main []
   (->> (->receiver receiver-cfg)
        (receive-auto-ack)
-       (nk/on-next! pp/pprint)
+       (nk/on-next! println)
        (nk/block)))
