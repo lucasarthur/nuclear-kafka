@@ -16,7 +16,9 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
-(ns nuclear-kafka.records.shape)
+(ns nuclear-kafka.records.shape
+  (:require
+   [nuclear-kafka.records.producer.sender-record :refer [->sender-record]]))
 
 (defn- shape-dispatcher [shape _]
   (if (sequential? shape) (first shape) shape))
@@ -41,14 +43,38 @@
    []
    shape))
 
-(defmulti with-shape shape-dispatcher)
+(defmulti consumer-shape shape-dispatcher)
 
-(defmethod with-shape :value [_ record] (:value record))
+(defmethod consumer-shape :value [_ record] (:value record))
 
-(defmethod with-shape :vector [shape record]
+(defmethod consumer-shape :vector [shape record]
   (->> (subvec shape 1) (vector-shape-reducer record)))
 
-(defmethod with-shape :map [shape record]
+(defmethod consumer-shape :map [shape record]
   (->> (subvec shape 1) (map-shape-reducer record)))
 
-(defmethod with-shape :default [_ record] record)
+(defmethod consumer-shape :default [_ record] record)
+
+(defmulti producer-shape shape-dispatcher)
+
+(defmethod producer-shape :topic-value [_ record]
+  (->sender-record
+   (if (map? record)
+     (select-keys record [:topic :value])
+     {:topic (first record) :value (second record)})))
+
+(defmethod producer-shape :default [_ record] (producer-shape :topic-value record))
+
+(defmethod producer-shape :map [shape record]
+  (->> (if (vector? shape) (subvec shape 1) [])
+       (#(if (empty? %) record (select-keys record %)))
+       (->sender-record)))
+
+(defmethod producer-shape :vector [shape record]
+  (when-not (vector? shape)
+    (throw
+     (IllegalArgumentException.
+      "MUST specify vector fields!")))
+  (-> (subvec shape 1)
+      (zipmap record)
+      (->sender-record)))

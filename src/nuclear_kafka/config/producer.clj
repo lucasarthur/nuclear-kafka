@@ -65,6 +65,8 @@
       (.scheduler on-scheduler)
       (add-producer-listener producer-listener)))
 
+;; add transactions
+
 ;; Producer
 ;; {:brokers ["localhost" 9092]
 ;;  :key-serializer long-serializer

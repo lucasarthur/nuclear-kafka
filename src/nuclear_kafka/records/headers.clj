@@ -23,7 +23,7 @@
 
 (defn ->record-header
   ([[k v]] (->record-header k v))
-  ([k v] (RecordHeader. (name k) (.getBytes v "UTF-8"))))
+  ([k v] (RecordHeader. (name k) (-> v str (.getBytes "UTF-8")))))
 
 (defn key [header]
   (-> header .key keyword))

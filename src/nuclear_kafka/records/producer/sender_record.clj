@@ -26,7 +26,16 @@
 
 (defn ->sender-record
   [{:keys [topic key value headers partition timestamp correlation-metadata]}]
-  (-> (ProducerRecord. (name topic) partition timestamp key value (->record-header-seq headers))
+  (-> (ProducerRecord.
+       (try (name topic)
+         (catch Exception _
+           (throw (IllegalArgumentException.
+                   "A producer MUST have a topic to produce on."))))
+       (when partition (.intValue partition))
+       timestamp
+       key
+       value
+       (->record-header-seq headers))
       (SenderRecord/create correlation-metadata)))
 
 (defn topic [record]

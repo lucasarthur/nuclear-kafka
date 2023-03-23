@@ -20,7 +20,7 @@
   (:require
    [nuclear-kafka.config.consumer :refer [->consumer-options]]
    [nuclear-kafka.records.consumer.receiver-record :refer [receiver-record->map]]
-   [nuclear-kafka.records.shape :refer [with-shape]]
+   [nuclear-kafka.records.shape :refer [consumer-shape]]
    [nuclear.core :as nk]
    [nuclear.util.sam :refer [->function]])
   (:import
@@ -36,7 +36,7 @@
   ([prefetch {:keys [receiver shape]}]
    (->> (.receive receiver prefetch)
         (nk/map receiver-record->map)
-        (nk/map #(with-shape shape %)))))
+        (nk/map #(consumer-shape shape %)))))
 
 (defn receive-auto-ack
   ([receiver]
@@ -45,7 +45,7 @@
    (->> (.receiveAutoAck receiver prefetch)
         (nk/flat-map identity)
         (nk/map receiver-record->map)
-        (nk/map #(with-shape shape %)))))
+        (nk/map #(consumer-shape shape %)))))
 
 (defn receive-atmost-once
   ([receiver]
@@ -53,13 +53,17 @@
   ([prefetch {:keys [receiver shape]}]
    (->> (.receiveAtmostOnce receiver prefetch)
         (nk/map receiver-record->map)
-        (nk/map #(with-shape shape %)))))
+        (nk/map #(consumer-shape shape %)))))
 
 (defn receive-exactly-once
   ([txm receiver]
    (receive-exactly-once txm nil receiver))
-  ([txm prefetch {:keys [receiver]}]
-   (.receiveExactlyOnce receiver txm prefetch)))
+  ([txm prefetch {:keys [receiver shape]}]
+   (->> (.receiveExactlyOnce receiver txm prefetch)
+        (nk/map
+         (fn [records]
+           (->> (nk/map receiver-record->map records)
+                (nk/map #(consumer-shape shape %))))))))
 
 (defn on-consumer! [consumer-fn {:keys [receiver]}]
   (->> consumer-fn ->function (.doOnConsumer receiver)))

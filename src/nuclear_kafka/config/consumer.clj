@@ -113,7 +113,7 @@
 ;;  :group-id "nuclear-kafka-consumer-group"
 ;;  :key-deserializer keyword-deserializer
 ;;  :value-deserializer json-deserializer
-;;  :shape [:map :topic :key :value :headers]}
+;;  :shape [:map :topic :key :value :headers]
 ;;  :poll-timeout 1000
 ;;  :close-timeout 20000
 ;;  :assign-listeners [println]
@@ -137,7 +137,7 @@
 ;;  :group-id "nuclear-kafka-consumer-group"
 ;;  :key-deserializer keyword-deserializer
 ;;  :value-deserializer json-deserializer
-;;  :shape [:map :topic :key :value :headers]}
+;;  :shape [:map :topic :key :value :headers]
 ;;  :protocol :sasl-plain
 ;;  :auth {:username "lucas"
 ;;         :password "arthur0102"
