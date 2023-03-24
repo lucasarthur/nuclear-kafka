@@ -16,18 +16,26 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
-(ns nuclear-kafka.security)
+(ns nuclear-kafka.records.consumer.receiver-partition
+  (:require
+   [nuclear-kafka.records.topic-partition :refer [topic-partition->map]]))
 
-(def protocols
-  {:plain "PLAINTEXT"
-   :ssl "SSL"
-   :sasl-plain "SASL_PLAINTEXT"
-   :sasl-ssl "SASL_SSL"})
+(defn topic-partition [receiver-partition]
+  (-> receiver-partition .topicPartition topic-partition->map))
 
-(def mechanisms
-  {:plain {:name "PLAIN"
-           :module "org.apache.kafka.common.security.plain.PlainLoginModule"}
-   :sha-256 {:name "SCRAM-SHA-256"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}
-   :sha-512 {:name "SCRAM-SHA-512"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}})
+(defn seek-to-beginning [receiver-partition]
+  (.seekToBeginning receiver-partition)
+  receiver-partition)
+
+(defn seek-to-end [receiver-partition]
+  (.seekToEnd receiver-partition)
+  receiver-partition)
+
+(defn seek [offset receiver-partition]
+  (.seek receiver-partition offset))
+
+(defn seek-to-timestamp [timestamp receiver-partition]
+  (.seekToTimestamp receiver-partition timestamp))
+
+(defn position [receiver-partition]
+  (.position receiver-partition))

@@ -16,18 +16,26 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
-(ns nuclear-kafka.security)
+(ns nuclear-kafka.records.producer.result
+  (:require
+   [nuclear-kafka.records.producer.record-metadata :refer [record-metadata->map]]))
 
-(def protocols
-  {:plain "PLAINTEXT"
-   :ssl "SSL"
-   :sasl-plain "SASL_PLAINTEXT"
-   :sasl-ssl "SASL_SSL"})
+(defn- update-if-contains [k f m]
+  (into m (for [[key v] (select-keys m [k])] [key (f v)])))
 
-(def mechanisms
-  {:plain {:name "PLAIN"
-           :module "org.apache.kafka.common.security.plain.PlainLoginModule"}
-   :sha-256 {:name "SCRAM-SHA-256"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}
-   :sha-512 {:name "SCRAM-SHA-512"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}})
+(defn exception [result]
+  (.exception result))
+
+(defn correlation-metadata [result]
+  (.correlationMetadata result))
+
+(defn record-metadata [result]
+  (.recordMetadata result))
+
+(defn result->map [result]
+  (->> {:error (exception result)
+        :correlation-metadata (correlation-metadata result)
+        :record-metadata (record-metadata result)}
+       (filter (comp some? val))
+       (into {})
+       (update-if-contains :record-metadata record-metadata->map)))

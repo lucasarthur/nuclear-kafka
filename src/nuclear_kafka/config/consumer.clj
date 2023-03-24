@@ -23,9 +23,10 @@
    [nuclear.util :refer [ms->duration]]
    [nuclear.util.sam :refer [->consumer ->supplier]]
    [nuclear.util.schedulers :refer [immediate]])
-  (:import [reactor.kafka.receiver ReceiverOptions ReceiverOptions$ConsumerListener]))
+  (:import
+   (reactor.kafka.receiver ReceiverOptions ReceiverOptions$ConsumerListener)))
 
-(defn ->consumer-listener [on-consumer-added on-consumer-removed]
+(defn- ->consumer-listener [on-consumer-added on-consumer-removed]
   (reify
     ReceiverOptions$ConsumerListener
     (consumerAdded [_ id consumer] (on-consumer-added id consumer))
@@ -104,4 +105,4 @@
       (.commitRetryInterval (ms->duration commit-retry-interval))
       (.schedulerSupplier (->supplier (fn [] on-scheduler)))
       (add-consumer-listener consumer-listener)
-      (.subscription topics)))
+      (.subscription (if (vector? topics) (map name topics) topics))))

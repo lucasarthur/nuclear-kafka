@@ -16,18 +16,21 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
-(ns nuclear-kafka.security)
+(ns nuclear-kafka.records.topic-partition
+  (:refer-clojure :exclude [partition])
+  (:import
+   (org.apache.kafka.common TopicPartition)))
 
-(def protocols
-  {:plain "PLAINTEXT"
-   :ssl "SSL"
-   :sasl-plain "SASL_PLAINTEXT"
-   :sasl-ssl "SASL_SSL"})
+(defn topic [tp]
+  (-> tp .topic keyword))
 
-(def mechanisms
-  {:plain {:name "PLAIN"
-           :module "org.apache.kafka.common.security.plain.PlainLoginModule"}
-   :sha-256 {:name "SCRAM-SHA-256"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}
-   :sha-512 {:name "SCRAM-SHA-512"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}})
+(defn partition [tp]
+  (.partition tp))
+
+(defn ->topic-partition
+  ([[t p]] (->topic-partition t p))
+  ([topic partition] (TopicPartition. (name topic) partition)))
+
+(defn topic-partition->map [tp]
+  {:topic (topic tp)
+   :partition (partition tp)})

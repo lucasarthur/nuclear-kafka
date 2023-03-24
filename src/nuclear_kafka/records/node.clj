@@ -16,18 +16,39 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Nuclear Kafka. If not, see <http://www.gnu.org/licenses/>.
 
-(ns nuclear-kafka.security)
+(ns nuclear-kafka.records.node
+  (:refer-clojure :exclude [empty?])
+  (:import
+   (org.apache.kafka.common Node)))
 
-(def protocols
-  {:plain "PLAINTEXT"
-   :ssl "SSL"
-   :sasl-plain "SASL_PLAINTEXT"
-   :sasl-ssl "SASL_SSL"})
+(def no-node (Node/noNode))
 
-(def mechanisms
-  {:plain {:name "PLAIN"
-           :module "org.apache.kafka.common.security.plain.PlainLoginModule"}
-   :sha-256 {:name "SCRAM-SHA-256"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}
-   :sha-512 {:name "SCRAM-SHA-512"
-             :module "org.apache.kafka.common.security.scram.ScramLoginModule"}})
+(defn empty? [node]
+  (.isEmpty node))
+
+(defn has-rack? [node]
+  (.hasRack node))
+
+(defn id [node]
+  (.id node))
+
+(defn id-str [node]
+  (.idString node))
+
+(defn host [node]
+  (.host node))
+
+(defn port [node]
+  (.port node))
+
+(defn rack [node]
+  (.rack node))
+
+(defn node->map [node]
+  (->> {:id (id node)
+        :id-str (id-str node)
+        :host (host node)
+        :port (port node)
+        :rack (rack node)}
+       (filter (comp some? val))
+       (into {})))
