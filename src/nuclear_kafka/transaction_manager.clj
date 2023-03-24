@@ -27,7 +27,7 @@
 (defn ->offset-and-metadata
   [{:keys [offset leader-epoch metadata]}]
   (let [le-opt (-> (Optional/ofNullable leader-epoch)
-                   (.map (->function #(.intValue %))))]
+                   (.map (->function #(int %))))]
     (OffsetAndMetadata. offset le-opt metadata)))
 
 (defn ->consumer-group-metadata

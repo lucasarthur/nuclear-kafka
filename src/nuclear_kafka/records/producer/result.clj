@@ -18,8 +18,10 @@
 
 (ns nuclear-kafka.records.producer.result
   (:require
-   [nuclear-kafka.util :refer [update-if-contains]]
    [nuclear-kafka.records.producer.record-metadata :refer [record-metadata->map]]))
+
+(defn- update-if-contains [k f m]
+  (into m (for [[key v] (select-keys m [k])] [key (f v)])))
 
 (defn exception [result]
   (.exception result))

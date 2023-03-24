@@ -31,7 +31,7 @@
          (catch Exception _
            (throw (IllegalArgumentException.
                    "A producer MUST have a topic to produce on."))))
-       (when partition (.intValue partition))
+       (when partition (int partition))
        timestamp
        key
        value

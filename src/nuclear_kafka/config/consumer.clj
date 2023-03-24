@@ -106,39 +106,3 @@
       (.schedulerSupplier (->supplier (fn [] on-scheduler)))
       (add-consumer-listener consumer-listener)
       (.subscription (if (vector? topics) (map name topics) topics))))
-
-;; Consumer
-;; {:brokers ["localhost" 9092]
-;;  :topics [:nuclear-kafka-test]
-;;  :group-id "nuclear-kafka-consumer-group"
-;;  :key-deserializer keyword-deserializer
-;;  :value-deserializer json-deserializer
-;;  :shape [:map :topic :key :value :headers]
-;;  :poll-timeout 1000
-;;  :close-timeout 20000
-;;  :assign-listeners [println]
-;;  :revoke-listeners [println]
-;;  :commit-interval 3000
-;;  :commit-batch-size 5
-;;  :max-commit-attempts 500
-;;  :commit-retry-interval 1000
-;;  :on-scheduler bounded-elastic
-;;  :consumer-listener
-;;  {:on-consumer-added #(println "id: " %1 "\nconsumer: " %2)
-;;   :on-consumer-removed #(println "id: " %1 "\nconsumer: " %2)}
-;;  :protocol :sasl-plain
-;;  :auth {:username "lucas"
-;;         :password "arthur0102"
-;;         :mechanism :plain}}
-
-;; Consumer minimal config
-;; {:brokers ["localhost" 9092]
-;;  :topics [:nuclear-kafka-test]
-;;  :group-id "nuclear-kafka-consumer-group"
-;;  :key-deserializer keyword-deserializer
-;;  :value-deserializer json-deserializer
-;;  :shape [:map :topic :key :value :headers]
-;;  :protocol :sasl-plain
-;;  :auth {:username "lucas"
-;;         :password "arthur0102"
-;;         :mechanism :plain}}
